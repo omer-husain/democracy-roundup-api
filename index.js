@@ -10,6 +10,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
+const Campaign = require("./models/campaign");
 const MongoStore = require("connect-mongo");
 
 const dbUrl =
@@ -31,7 +32,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-const secret = process.env.SECRET || "changethis";
+const secret = process.env.SECRET || "thisIsAWeakSecret";
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
@@ -60,3 +61,35 @@ const sessionConfig = {
 };
 
 app.use(session(sessionConfig));
+
+app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+  //these variables are accessible by all ejs templates
+  console.log(req.session);
+  res.locals.currentUser = req.user; //passport creates this req.user
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
+// app.use("/", userRoutes);
+// app.use("/campgrounds", campgroundRoutes);
+// app.use("/campgrounds/:id/reviews", reviewsRoutes);
+
+app.get("/", (req, res) => {
+  res.send("home");
+});
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`serving on port ${port}`);
+});
