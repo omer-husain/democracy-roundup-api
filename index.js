@@ -9,8 +9,16 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const User = require("./models/user");
+
 const Campaign = require("./models/campaign");
+const User = require("./models/user");
+const Comment = require("./models/comment");
+
+const userRoutes = require("./routes/users");
+const campaignRoutes = require("./routes/campaigns");
+const commentRoutes = require("./routes/comments");
+const supporterRoutes = require("./routes/supporters");
+
 const MongoStore = require("connect-mongo");
 
 const dbUrl =
@@ -80,12 +88,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("/", userRoutes);
-// app.use("/campgrounds", campgroundRoutes);
-// app.use("/campgrounds/:id/reviews", reviewsRoutes);
+app.use("/", userRoutes);
+app.use("/campaigns", campaignRoutes);
+app.use("/campaigns/:id/comments", commentRoutes);
+app.use("/campaigns/:id/supporters", supporterRoutes);
 
 app.get("/", (req, res) => {
-  res.send("home");
+  res.render("home");
 });
 
 const port = process.env.PORT || 3000;
