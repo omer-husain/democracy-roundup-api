@@ -9,6 +9,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const cors = require("cors");
 
 const Campaign = require("./models/campaign");
 const User = require("./models/user");
@@ -39,6 +40,8 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.json());
+app.use(cors());
 
 const secret = process.env.SECRET || "thisIsAWeakSecret";
 

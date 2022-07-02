@@ -8,10 +8,10 @@ module.exports.list = async (req, res) => {
 module.exports.createCampaign = async (req, res, next) => {
   const campaign = new Campaign(req.body.campaign);
 
-  campaign.images = req.files.map((f) => ({
-    url: f.path,
-    filename: f.filename,
-  }));
+  // campaign.images = req.files.map((f) => ({
+  //   url: f.path,
+  //   filename: f.filename,
+  // }));
   campaign.organiser = req.user._id;
   await campaign.save();
   console.log(campaign);
@@ -20,8 +20,8 @@ module.exports.createCampaign = async (req, res, next) => {
 
 module.exports.showCampaign = async (req, res) => {
   const campaign = await Campaign.findById(req.params.id)
-    .populate({ path: "reviews", populate: { path: "author" } })
-    .populate("author");
+    .populate({ path: "comments", populate: { path: "author" } })
+    .populate("organiser");
   console.log(campaign);
   if (!campaign) {
     req.flash("error", "Cannot find that campaign");

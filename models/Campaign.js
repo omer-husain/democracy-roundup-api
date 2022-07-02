@@ -5,7 +5,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const CampaignSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
-  organizer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  organiser: { type: Schema.Types.ObjectId, ref: "User", required: true },
   comments: [
     {
       type: Schema.Types.ObjectId,
