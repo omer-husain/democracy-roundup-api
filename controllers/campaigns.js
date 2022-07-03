@@ -12,7 +12,7 @@ module.exports.createCampaign = async (req, res, next) => {
   //   url: f.path,
   //   filename: f.filename,
   // }));
-  campaign.organiser = req.user._id;
+  // campaign.organiser = req.user._id;
   await campaign.save();
   console.log(campaign);
   req.flash("success", "Successfully made a new campaign!");
@@ -29,8 +29,6 @@ module.exports.showCampaign = async (req, res) => {
   }
   res.status(200).json(campaign);
 };
-
-
 
 module.exports.updateCampaign = async (req, res) => {
   const { id } = req.params;
@@ -54,13 +52,13 @@ module.exports.updateCampaign = async (req, res) => {
     });
   }
   req.flash("success", "Successfully updated campaign!");
-  res.redirect(`/campgrounds/${campground._id}`);
+  res.redirect(`/campaigns/${campaigns._id}`);
 };
 
 module.exports.delete = async (req, res) => {
   const { id } = req.params;
-  await Campground.findByIdAndDelete(id);
-  req.flash("success", "Successfully deleted campground!");
+  await Campaign.findByIdAndDelete(id);
+  req.flash("success", "Successfully deleted campaign!");
 
-  res.redirect("/campgrounds");
+  res.redirect("/campaigns");
 };
