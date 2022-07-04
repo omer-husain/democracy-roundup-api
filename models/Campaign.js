@@ -3,9 +3,9 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require("passport-local-mongoose");
 
 const CampaignSchema = new Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  organiser: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  title: { type: String },
+  description: { type: String },
+  organiser: { type: Schema.Types.ObjectId, ref: "User" },
   comments: [
     {
       type: Schema.Types.ObjectId,
@@ -23,6 +23,9 @@ const CampaignSchema = new Schema({
   issue: { type: String },
 });
 
-CampaignSchema.plugin(passportLocalMongoose);
+CampaignSchema.plugin(passportLocalMongoose, {
+  usernameField: "userName",
+  usernameUnique: false,
+});
 
 module.exports = mongoose.model("Campaign", CampaignSchema);

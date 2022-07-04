@@ -1,9 +1,11 @@
 const express = require("express");
+const catchAsync = require("../utils/catchAsync");
 const router = express.Router();
 // const campaigns = require("../controllers/campaigns");
+const supporters = require("../controllers/supporters");
 
-router.route("/").get().post();
+router.post("/", catchAsync(supporters.createSupporter));
 
-router.route("/:id").get().put().delete();
+// router.delete("/:id").get().put().delete();
 
 module.exports = router;

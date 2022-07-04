@@ -11,6 +11,7 @@ router.route("/login").post(
   passport.authenticate("local", {
     failureFlash: true,
     failureRedirect: "/login",
+    passReqToCallback: true,
   }),
   users.login
 );

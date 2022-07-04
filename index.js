@@ -10,6 +10,8 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const cors = require("cors");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 const Campaign = require("./models/campaign");
 const User = require("./models/user");
@@ -37,11 +39,17 @@ db.once("open", () => {
 });
 
 const app = express();
-
-app.use(express.urlencoded({ extended: false }));
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use(cors());
+
+app.use(mongoSanitize());
 
 const secret = process.env.SECRET || "thisIsAWeakSecret";
 
@@ -83,7 +91,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-  //these variables are accessible by all ejs templates
   console.log(req.session);
   res.locals.currentUser = req.user; //passport creates this req.user
   res.locals.success = req.flash("success");

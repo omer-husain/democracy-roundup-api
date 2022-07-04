@@ -7,12 +7,10 @@ module.exports.list = async (req, res) => {
 
 module.exports.createCampaign = async (req, res, next) => {
   const campaign = new Campaign(req.body.campaign);
-
-  // campaign.images = req.files.map((f) => ({
-  //   url: f.path,
-  //   filename: f.filename,
-  // }));
-  // campaign.organiser = req.user._id;
+  console.log(req.body);
+  console.log(req.user);
+  campaign.organiser = req.user._id;
+  campaign.username = req.user.username;
   await campaign.save();
   console.log(campaign);
   req.flash("success", "Successfully made a new campaign!");
