@@ -15,6 +15,8 @@ module.exports.register = async (req, res, next) => {
       res.status(200).json({
         redirectMessage: "welcome to Democracy-Roundup",
         redirectUrl: "/campaigns",
+        auth: req.isAuthenticated(),
+        user: { username: req.user.username, userId: req.user._id },
       });
     });
   } catch (e) {

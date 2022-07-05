@@ -9,11 +9,12 @@ module.exports.createCampaign = async (req, res, next) => {
   const campaign = new Campaign(req.body.campaign);
   console.log(req.body);
   console.log(req.user);
-  campaign.organiser = req.user._id;
-  campaign.username = req.user.username;
+  campaign.organiser = req.user._id ?? "00001";
+  campaign.username = req.user.username ?? "Placeholder";
   await campaign.save();
   console.log(campaign);
   req.flash("success", "Successfully made a new campaign!");
+  res.status(201).json(campaign);
 };
 
 module.exports.showCampaign = async (req, res) => {
@@ -33,22 +34,9 @@ module.exports.updateCampaign = async (req, res) => {
   const campaign = await Campaign.findByIdAndUpdate(id, {
     ...req.body.campaign,
   });
-  const imgs = req.files.map((f) => ({
-    url: f.path,
-    filename: f.filename,
-  }));
-
-  campaign.images.push(...imgs);
 
   await campaign.save();
-  if (req.body.deleteImages) {
-    for (let filename of req.body.deleteImages) {
-      await cloudinary.uploader.destroy(filename);
-    }
-    await campaign.updateOne({
-      $pull: { images: { filename: { $in: req.body.deleteImages } } },
-    });
-  }
+
   req.flash("success", "Successfully updated campaign!");
   res.redirect(`/campaigns/${campaigns._id}`);
 };
