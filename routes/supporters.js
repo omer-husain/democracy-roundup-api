@@ -5,6 +5,8 @@ const router = express.Router();
 const supporters = require("../controllers/supporters");
 
 router.post("/", catchAsync(supporters.createSupporter));
+router.get("/"), catchAsync((supporters.list));
+
 
 // router.delete("/:id").get().put().delete();
 

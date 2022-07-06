@@ -20,7 +20,8 @@ module.exports.createCampaign = async (req, res, next) => {
 module.exports.showCampaign = async (req, res) => {
   const campaign = await Campaign.findById(req.params.id)
     .populate({ path: "comments", populate: { path: "author" } })
-    .populate("organiser");
+    .populate("organiser")
+    .populate({ path: "supporters", populate: { path: "person" } });
   console.log(campaign);
   if (!campaign) {
     req.flash("error", "Cannot find that campaign");
