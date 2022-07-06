@@ -45,7 +45,7 @@ module.exports.logout = (req, res) => {
   req.logout();
   req.flash("success", "GoodBye!");
   res.status(200).json({
-    redirectMessage: "GoodBye!",
+    redirectMessage: "GoodBye!!!!",
     redirectUrl: "/campaigns",
   });
 };
